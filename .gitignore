@@ -1,7 +1,7 @@
 .DS_Store
 Thumbs.db
 ._*
-
+.idea
 /data/htdocs/MyAquaServer
 /data/htdocs/bookmarker
 /data/htdocs/phpMyAdmin
