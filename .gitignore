@@ -1,0 +1,10 @@
+.DS_Store
+Thumbs.db
+._*
+
+/data/htdocs/MyAquaServer
+/data/htdocs/bookmarker
+/data/htdocs/phpMyAdmin
+/data/htdocs/composer.phar
+/data/oracle/*
+/data/mysql/db/*
