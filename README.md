@@ -154,14 +154,14 @@ OraclePDOを使用してください。OracleOCIは別途PHPライブラリの�
     'className' => 'CakeDC\OracleDriver\Database\OracleConnection',
     //'driver' => 'CakeDC\OracleDriver\Database\Driver\OracleOCI', # For OCI8
     'driver' => 'CakeDC\OracleDriver\Database\Driver\OraclePDO', # For PDO_OCI
-    'host' => 'cakeoracle_phpfpm_1',# Database host name or IP address
-    //'port' => 'nonstandard_port', # Database port number (default: 1521)
-    'username' => 'system',         # Database username
-    'password' => 'oracle',         # Database password
-    'database' => 'xe',             # Database name (maps to Oracle's <code>SERVICE_NAME</code>)
-    'sid' => 'xe',                  # Database System ID (maps to Oracle's <code>SID</code>)
-    'instance' => '',               # Database instance name (maps to Oracle's <code>INSTANCE_NAME</code>)
-    'pooled' => '',                 # Database pooling (maps to Oracle's <code>SERVER=POOLED</code>)
+    'host' => 'cakeoracle_oracle_1', # Database host name or IP address
+    //'port' => 'nonstandard_port',  # Database port number (default: 1521)
+    'username' => 'system',          # Database username
+    'password' => 'oracle',          # Database password
+    'database' => 'xe',              # Database name (maps to Oracle's <code>SERVICE_NAME</code>)
+    'sid' => 'xe',                   # Database System ID (maps to Oracle's <code>SID</code>)
+    'instance' => '',                # Database instance name (maps to Oracle's <code>INSTANCE_NAME</code>)
+    'pooled' => '',                  # Database pooling (maps to Oracle's <code>SERVER=POOLED</code>)
     ]
 ]
 ```
