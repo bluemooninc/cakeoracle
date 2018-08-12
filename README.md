@@ -59,8 +59,6 @@ $cfg['Servers'][$i]['host'] = 'cakeoracle_mysql_1';
 ```
 ## ORACLEコンテナについて
 
-- [WIP] 現在全ての動作確認が終わっていないので所によっては情報が欠落している場合があります。
-
 ### ログイン情報
 ```angular2html
 User Id : sys, system
@@ -117,7 +115,10 @@ ldconfig
 $sqlplus system/oracle@//localhost:1521/xe
 ```
 
-### CakePHP3 から接続
+### CakePHP3 に ORACLE ドライバーを組み込む
+
+- [WIP] 現在ドライバの動作確認が終わっていないのでサンプルアプリの情報が欠落しています。
+
 
 OraclePDOを使用して、CakePHP３からORACLEに接続します。
 詳しい説明は、以下URLを参照ください。
@@ -141,9 +142,11 @@ php ../composer.phar require cakedc/cakephp-oracle-driver
 ```angular2html
 <span class="pl-s1"><span class="pl-c1">Plugin</span><span class="pl-k">::</span>load(<span class="pl-s"><span class="pl-pds">'</span>CakeDC/OracleDriver<span class="pl-pds">'</span></span>, [<span class="pl-s"><span class="pl-pds">'</span>bootstrap<span class="pl-pds">'</span></span> <span class="pl-k">=></span> <span class="pl-c1">true</span>]);
 </span>
-
-app.phpにデータソースを記述します。OraclePDOを使用します。OracleOCIはPHPライブラリの組み込みが必要です。
 ```
+
+#### app.phpにデータソースを記述
+OraclePDOを使用してください。OracleOCIは別途PHPライブラリの組み込みが必要です。
+
 データソース設定例
 ```angular2html
 'Datasources' => [
@@ -163,6 +166,9 @@ app.phpにデータソースを記述します。OraclePDOを使用します。O
 ]
 ```
 
+#### TODO
+
+CakePHP3+ORACLEのサンプルコードを追加する予定です。
 
 # License
 
