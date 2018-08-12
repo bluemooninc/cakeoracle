@@ -30,7 +30,7 @@ docker ps
 # phpコンテナへ入る
 docker exec -it cakeoracle_phpfpm_1 /bin/sh
 
-# CakePHPのcomposerをphpfpmコンテナに入ってインストール
+# phpコンテナにcomposerをインストールする
 curl -s https://getcomposer.org/installer | php
 
 # 動作確認用のサンプルプロジェクト生成
@@ -76,48 +76,73 @@ $ docker exec -it cakeoracle_oracle_1 bash
 
 ホストPCからORACLEに接続します。
 
+### ブラウザより
+
+#### Oracle Enterprise Management console
+Chromeだと失敗したのでFireFoxで動作確認しています。
+```angular2html
+http://localhost:8080/em
+user: sys
+password: oracle
+connect as sysdba: true
+```
 #### SQL Developper
 
-以下、ダウンロードし設定します。
+GUIアプリで管理画面を開きます。利用については以下を参考に。
 
 http://www.oracle.com/technetwork/jp/developer-tools/sql-developer/downloads/index.html
 
 #### sql plus
 
-Oracleのサイトから以下のrpmをダウンロード
+CUIで管理します。Oracleのサイトにログインしrpmをダウンロードしてインストール。
+AlpineLinuxには入っていないので別のコンテナから利用ください。
 
 oracle-instantclient18.3-basic-18.3.0.0.0-1.x86_64.rpm 
 oracle-instantclient18.3-sqlplus-18.3.0.0.0-1.x86_64.rpm 
 
 インストール
 ```angular2html
-$ rpm -ivh oracle-instantclient12.1-basic-18.3.0.0.0-1.x86_64.rpm
-$ rpm -ivh oracle-instantclient12.1-sqlplus-18.3.0.0.0-1.x86_64.rpm
+$ rpm -ivh oracle-instantclient18.3-basic-18.3.0.0.0-1.x86_64.rpm
+$ rpm -ivh oracle-instantclient18.3-sqlplus-18.3.0.0.0-1.x86_64.rpm
 ```
 LD_LIBRARY_PATHを設定
 
 $sudo vi /etc/ld.so.conf.d/oracle.conf
 ```angular2html
-/usr/lib/oracle/12.1/client64/lib
+ldconfig
+/usr/lib/oracle/18.3/client64/lib
 ``` 
-コマンド確認
+設定が済んだら以下にて接続が可能となります。
 ```angular2html
-$ldconfig
-$sqlplus64 -V
+$sqlplus system/oracle@//localhost:1521/xe
 ```
 
 ### CakePHP3 から接続
 
-コンポーザーでインストール
+OraclePDOを使用して、CakePHP３からORACLEに接続します。
+詳しい説明は、以下URLを参照ください。
+
+https://github.com/CakeDC/cakephp-oracle-driver
+
+最初にコンポーザーでドライバーをインストールします。
+
 ```angular2html
-cd [cakePHPをインストールしたディレクトリ]
-composer require cakedc/cakephp-oracle-driver
+# phpコンテナへ入る
+docker exec -it cakeoracle_phpfpm_1 /bin/sh
+# 通常通りにプロジェクトを生成します。
+php composer.phar create-project --prefer-dist cakephp/app cakedc
+# 生成した（もしくは既存の）プロジェクトに移動します。
+cd cakedc
+# composer で cakephp-oracle-driver をインストールします。
+php ../composer.phar require cakedc/cakephp-oracle-driver
 ```
-In bootstrap.php load plugin with bootstrap.
+
+次にプラグインの設定を bootstrap.php に編集します。
 ```angular2html
 <span class="pl-s1"><span class="pl-c1">Plugin</span><span class="pl-k">::</span>load(<span class="pl-s"><span class="pl-pds">'</span>CakeDC/OracleDriver<span class="pl-pds">'</span></span>, [<span class="pl-s"><span class="pl-pds">'</span>bootstrap<span class="pl-pds">'</span></span> <span class="pl-k">=></span> <span class="pl-c1">true</span>]);
 </span>
 
+app.phpにデータソースを記述します。OraclePDOを使用します。OracleOCIはPHPライブラリの組み込みが必要です。
 ```
 データソース設定例
 ```angular2html
@@ -130,17 +155,12 @@ In bootstrap.php load plugin with bootstrap.
     //'port' => 'nonstandard_port', # Database port number (default: 1521)
     'username' => 'system',         # Database username
     'password' => 'oracle',         # Database password
-    'database' => 'XE',             # Database name (maps to Oracle's <code>SERVICE_NAME</code>)
-    'sid' => 'orcl',                # Database System ID (maps to Oracle's <code>SID</code>)
+    'database' => 'xe',             # Database name (maps to Oracle's <code>SERVICE_NAME</code>)
+    'sid' => 'xe',                  # Database System ID (maps to Oracle's <code>SID</code>)
     'instance' => '',               # Database instance name (maps to Oracle's <code>INSTANCE_NAME</code>)
     'pooled' => '',                 # Database pooling (maps to Oracle's <code>SERVER=POOLED</code>)
     ]
 ]
-```
-
-
-```angular2html
-$ sqlplus system/oracle@xe:cakeoracle_oracle_1
 ```
 
 

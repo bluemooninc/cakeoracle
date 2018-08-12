@@ -30,7 +30,7 @@ services:
       - phpfpm
   phpfpm:
     restart: always
-    image: "devilbox/php-fpm:7.2-prod"
+    build: ./data/phpfpm/
     ports:
       - "9000:9000"
     environment:
@@ -47,7 +47,7 @@ services:
       - "8080:8080"
       - "1521:1521"
     environment:
-      ORACLE_SID: orcl
-      ORACLE_PDB: pdb1
+      ORACLE_SID: xe
+      ORACLE_PDB: xe
     volumes:
      - "./data/oracle:/u01/app/oracle"
