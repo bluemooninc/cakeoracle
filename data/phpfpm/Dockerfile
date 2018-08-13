@@ -64,22 +64,23 @@ RUN wget "https://github.com/Sean-Der/pecl-networking-ssh2/archive/php7.zip" \
     && make && make install \
     && docker-php-ext-enable ssh2
 ## TODO: For ORACLE OCI libraly
-#RUN \
-#  wget -qO- https://github.com/srebrinb/Docker-Apache-php7-oci8/raw/master/instantclient-basic-linux.x64-12.1.0.2.0.zip && \
-#  unzip instantclient-basic-linux.x64-12.1.0.2.0.zip -d /usr/local && \
-#  wget -qO- https://github.com/srebrinb/Docker-Apache-php7-oci8/raw/master/instantclient-sdk-linux.x64-12.1.0.2.0.zip && \
-#  unzip instantclient-sdk-linux.x64-12.1.0.2.0.zip -d /usr/local && \
-#  wget -qO- https://github.com/srebrinb/Docker-Apache-php7-oci8/raw/master/instantclient-sqlplus-linux.x64-12.1.0.2.0.zip && \
-#  unzip instantclient-sqlplus-linux.x64-12.1.0.2.0.zip -d /usr/local
-#RUN \
-#  ln -s /usr/local/instantclient_12_2 /usr/local/instantclient && \
-#  ln -s /usr/local/instantclient/libclntsh.so.* /usr/local/instantclient/libclntsh.so && \
-#  ln -s /usr/local/instantclient/lib* /usr/lib && \
-#  ln -s /usr/local/instantclient/sqlplus /usr/bin/sqlplus
-#RUN \
-#  docker-php-ext-configure oci8 --with-oci8=instantclient,/usr/local/instantclient && \
-#  docker-php-ext-install oci8 && \
-#  rm -rf /var/lib/apt/lists/*
+# Install Oracle Instantclient
+RUN mkdir -p /opt/oracle
+COPY instantclient-basic-linux.x64-12.1.0.2.0.zip /opt/oracle/instantclient-basic.zip
+COPY instantclient-sdk-linux.x64-12.1.0.2.0.zip /opt/oracle/instantclient-sdk.zip
+RUN unzip /opt/oracle/instantclient-sdk.zip -d /opt/oracle \
+    && unzip /opt/oracle/instantclient-basic.zip -d /opt/oracle \
+    && rm -rf /opt/oracle/*.zip \
+    && ln -s /opt/oracle/instantclient_12_1/libclntsh.so.12.1 /opt/oracle/instantclient_12_1/libclntsh.so \
+    && ln -s /opt/oracle/instantclient_12_1/libclntshcore.so.12.1 /opt/oracle/instantclient_12_1/libclntshcore.so \
+    && ln -s /opt/oracle/instantclient_12_1/libocci.so.12.1 /opt/oracle/instantclient_12_1/libocci.so
+# Install Oracle extensions
+RUN docker-php-ext-configure pdo_oci --with-pdo-oci=instantclient,/opt/oracle/instantclient_12_1,12.1 \
+    && echo 'instantclient,/opt/oracle/instantclient_12_1/' | pecl install oci8 \
+    && docker-php-ext-install \
+       pdo_oci \
+    && docker-php-ext-enable \
+       oci8
 RUN set -x && \
   deluser www-data && \
   addgroup -g 50 -S www-data && \

@@ -35,6 +35,7 @@ services:
       - "9000:9000"
     environment:
       TZ: "Asia/Tokyo"
+      ORACLE_HOME: /opt/oracle
     volumes:
       - "./data/htdocs:/var/www/html"
     depends_on:
