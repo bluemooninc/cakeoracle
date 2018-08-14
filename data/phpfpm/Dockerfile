@@ -61,10 +61,13 @@ RUN unzip /opt/oracle/instantclient-sdk.zip -d /opt/oracle \
 
 ## For PHP module install with Oracle extensions
 RUN set -x && \
+  echo 'instantclient,/opt/oracle/instantclient_12_1/' | pecl install oci8 && \
+  chmod 755 /usr/local/lib/php/extensions/no-debug-non-zts-20170718/oci8.so
+
+RUN set -x && \
   apk add --no-cache icu-libs && \
   apk add --no-cache --virtual build-dependencies && \
   NPROC=$(grep -c ^processor /proc/cpuinfo 2>/dev/null || 1) && \
-  echo 'instantclient,/opt/oracle/instantclient_12_1/' | pecl install oci8 && \
   docker-php-ext-configure pdo_oci --with-pdo-oci=instantclient,/opt/oracle/instantclient_12_1,12.1 && \
   docker-php-ext-install -j${NPROC} intl && \
   docker-php-ext-install -j${NPROC} mysqli && \
@@ -72,9 +75,10 @@ RUN set -x && \
   docker-php-ext-install -j${NPROC} pdo_mysql && \
   docker-php-ext-install -j${NPROC} pdo && \
   docker-php-ext-install -j${NPROC} mbstring && \
-  docker-php-ext-enable -j${NPROC} oci8 && \
+  docker-php-ext-enable oci8 && \
   apk del --no-cache --purge build-dependencies && \
   rm -rf /tmp/pear
+
 
 ## For ZIP and SSH
 RUN wget "https://github.com/Sean-Der/pecl-networking-ssh2/archive/php7.zip" \
@@ -84,6 +88,7 @@ RUN wget "https://github.com/Sean-Der/pecl-networking-ssh2/archive/php7.zip" \
     && ./configure \
     && make && make install \
     && docker-php-ext-enable ssh2
+
 ## set user
 RUN set -x && \
   deluser www-data && \
