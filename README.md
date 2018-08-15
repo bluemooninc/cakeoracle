@@ -115,8 +115,6 @@ $sqlplus system/oracle@//localhost:1521/xe
 
 ### CakePHP3 に ORACLE ドライバーを組み込む
 
-- [WIP] 現在ドライバの動作確認が終わっていないのでサンプルアプリの情報が欠落しています。
-
 
 OraclePDOを使用して、CakePHP３からORACLEに接続します。
 詳しい説明は、以下URLを参照ください。
@@ -129,11 +127,11 @@ https://github.com/CakeDC/cakephp-oracle-driver
 # phpコンテナへ入る
 docker exec -it cakeoracle_php_1 /bin/sh
 # 通常通りにプロジェクトを生成します。
-php composer.phar create-project --prefer-dist cakephp/app cakedc
+composer create-project --prefer-dist cakephp/app cakedc
 # 生成した（もしくは既存の）プロジェクトに移動します。
 cd cakedc
 # composer で cakephp-oracle-driver をインストールします。
-php ../composer.phar require cakedc/cakephp-oracle-driver
+composer require cakedc/cakephp-oracle-driver
 ```
 
 次にプラグインの設定を bootstrap.php に編集します。
@@ -143,15 +141,14 @@ php ../composer.phar require cakedc/cakephp-oracle-driver
 ```
 
 #### app.phpにデータソースを記述
-OraclePDOを使用してください。OracleOCIは別途PHPライブラリの組み込みが必要です。
 
 データソース設定例
 ```angular2html
 'Datasources' => [
     'default' => [
     'className' => 'CakeDC\OracleDriver\Database\OracleConnection',
-    //'driver' => 'CakeDC\OracleDriver\Database\Driver\OracleOCI', # For OCI8
-    'driver' => 'CakeDC\OracleDriver\Database\Driver\OraclePDO', # For PDO_OCI
+    'driver' => 'CakeDC\OracleDriver\Database\Driver\OracleOCI', # For OCI8
+    //'driver' => 'CakeDC\OracleDriver\Database\Driver\OraclePDO', # For PDO_OCI
     'host' => 'cakeoracle_oracle_1', # Database host name or IP address
     //'port' => 'nonstandard_port',  # Database port number (default: 1521)
     'username' => 'system',          # Database username
