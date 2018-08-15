@@ -30,20 +30,18 @@ docker ps
 # phpコンテナへ入る
 docker exec -it cakeoracle_php_1 /bin/sh
 
-# phpコンテナにcomposerをインストールする
-curl -s https://getcomposer.org/installer | php
-
 # 動作確認用のサンプルプロジェクト生成
-php composer.phar create-project --prefer-dist cakephp/app bookmarker
+composer create-project --prefer-dist cakephp/app bookmarker
 exit
 ```
 
 ## サンプルプロジェクトをドキュメントルートに変更
 ```angular2html
 $ docker-compose down
-# ./data/nginx/conf/conf.d/default.conf の以下を設定
-    #root        /var/www/html;
-    root        /var/www/html/bookmarker/webroot;
+# docker-compose.yml の以下を設定
+    volumes:
+#      - "./data/htdocs:/var/www/html"
+      - "./data/htdocs/bookmarker:/var/www/html"
 $ docker-compose up
 ```
 ## ブラウザで確認
