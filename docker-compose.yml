@@ -13,32 +13,18 @@ services:
       MYSQL_PASSWORD: secret
       MYSQL_DATABASE: my_app
       TZ: "Asia/Tokyo"
-  nginx:
+  php:
     restart: always
-    image: "nginx:mainline-alpine"
+    build: data/php/
     ports:
       - "80:80"
-      - "443:443"
+    working_dir: /var/www/html
     volumes:
-      - "./data/nginx/conf:/etc/nginx/"
       - "./data/htdocs:/var/www/html"
     environment:
       TZ: "Asia/Tokyo"
-    depends_on:
-      - phpfpm
-    links:
-      - phpfpm
-  phpfpm:
-    restart: always
-    build: ./data/phpfpm/
-    ports:
-      - "9000:9000"
-    environment:
-      TZ: "Asia/Tokyo"
-      ORACLE_HOME: /opt/oracle
-      LD_LIBRARY_PATH: /opt/oracle/lib
-    volumes:
-      - "./data/htdocs:/var/www/html"
+      ORACLE_HOME: /opt/oracle/instantclient_12_1
+      LD_LIBRARY_PATH: /opt/oracle/instantclient_12_1
     depends_on:
       - mysql
     links:

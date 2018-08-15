@@ -28,7 +28,7 @@ docker-compose up -d
 docker ps
 
 # phpコンテナへ入る
-docker exec -it cakeoracle_phpfpm_1 /bin/sh
+docker exec -it cakeoracle_php_1 /bin/sh
 
 # phpコンテナにcomposerをインストールする
 curl -s https://getcomposer.org/installer | php
@@ -129,7 +129,7 @@ https://github.com/CakeDC/cakephp-oracle-driver
 
 ```angular2html
 # phpコンテナへ入る
-docker exec -it cakeoracle_phpfpm_1 /bin/sh
+docker exec -it cakeoracle_php_1 /bin/sh
 # 通常通りにプロジェクトを生成します。
 php composer.phar create-project --prefer-dist cakephp/app cakedc
 # 生成した（もしくは既存の）プロジェクトに移動します。
