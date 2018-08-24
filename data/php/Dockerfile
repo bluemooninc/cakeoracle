@@ -10,7 +10,15 @@ MAINTAINER y.sakai
 
 RUN apt-get update &&\
     apt-get install apt-utils unzip -y &&\
-    apt-get install libaio1 libaio-dev -y
+    apt-get install libaio1 libaio-dev -y &&\
+    apt-get install libicu-dev -y
+
+# for MySQL PHP extention
+RUN docker-php-ext-configure intl \
+    && docker-php-ext-install mbstring \
+    && docker-php-ext-install intl \
+    && docker-php-ext-install pdo_mysql \
+    && docker-php-ext-install mysqli
 
 # Install Oracle Instantclient
 RUN mkdir -p /opt/oracle
@@ -35,11 +43,6 @@ RUN docker-php-ext-configure pdo_oci --with-pdo-oci=instantclient,/opt/oracle/in
     && echo 'instantclient,/opt/oracle/instantclient_12_1/' | pecl install oci8 \
     && docker-php-ext-enable \
         oci8
-
-# Install intl
-RUN apt-get update && \
-    apt-get install -y libicu-dev && \
-    docker-php-ext-install intl
 
 # Install the gmp extensions
 RUN apt-get update -y
