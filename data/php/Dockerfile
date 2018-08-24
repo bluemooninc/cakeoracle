@@ -12,6 +12,7 @@ MAINTAINER y.sakai
 RUN apt-get update &&\
     apt-get install apt-utils unzip -y &&\
     apt-get install libaio1 libaio-dev -y
+
 # Install Oracle Instantclient
 RUN mkdir -p /opt/oracle
 COPY instantclient-basic-linux.x64-12.1.0.2.0.zip /opt/oracle/instantclient-basic.zip
@@ -35,10 +36,21 @@ RUN docker-php-ext-configure pdo_oci --with-pdo-oci=instantclient,/opt/oracle/in
     && echo 'instantclient,/opt/oracle/instantclient_12_1/' | pecl install oci8 \
     && docker-php-ext-enable \
         oci8
+
+# Install intl
+RUN apt-get update && \
+    apt-get install -y libicu-dev && \
+    docker-php-ext-install intl
+
 RUN ldconfig
+
 # Install composer
 RUN curl -s http://getcomposer.org/installer | php
 RUN mv composer.phar /usr/local/bin/composer
+
+RUN apt-get update && \
+    apt-get install -y libicu-dev && \
+    docker-php-ext-install intl
 
 # timezone
 RUN cp -p /usr/share/zoneinfo/Japan /etc/localtime
