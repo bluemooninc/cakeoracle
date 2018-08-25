@@ -136,8 +136,7 @@ composer require cakedc/cakephp-oracle-driver
 
 次にプラグインの設定を bootstrap.php に編集します。
 ```angular2html
-<span class="pl-s1"><span class="pl-c1">Plugin</span><span class="pl-k">::</span>load(<span class="pl-s"><span class="pl-pds">'</span>CakeDC/OracleDriver<span class="pl-pds">'</span></span>, [<span class="pl-s"><span class="pl-pds">'</span>bootstrap<span class="pl-pds">'</span></span> <span class="pl-k">=></span> <span class="pl-c1">true</span>]);
-</span>
+	Plugin::load('CakeDC/OracleDriver', ['bootstrap' => true]);
 ```
 
 #### app.phpにデータソースを記述
