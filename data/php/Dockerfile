@@ -64,6 +64,7 @@ RUN apt-get update && \
 # timezone
 RUN cp -p /usr/share/zoneinfo/Japan /etc/localtime
 
-ADD ./httpd.conf /etc/httpd/conf/httpd.conf
+RUN a2enmod rewrite
+## ADD apache2/000-default.conf /etc/apache2/sites-enabled/000-default.conf
 
 EXPOSE 80
